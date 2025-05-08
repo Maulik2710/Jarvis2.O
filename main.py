@@ -6,7 +6,7 @@ import musiclibrary
 import requests
 import google.generativeai as genai
 
-genai.configure(api_key="AIzaSyCE_iYZEKcioMkRBCIFy6_CoxyakGaQN0Y")
+genai.configure(api_key="API_KEY")
 
 
 recognizer = sr.Recognizer()
