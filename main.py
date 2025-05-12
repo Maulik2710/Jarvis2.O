@@ -3,7 +3,6 @@ import webbrowser
 import pyttsx3
 import plateform
 import musiclibrary
-import requests
 import google.generativeai as genai
 
 genai.configure(api_key="API_KEY")
@@ -18,6 +17,12 @@ recognizer.pause_threshold = 0.6
 engine = pyttsx3.init()
 
 def ask_gemini(prompt):
+    ''' This helps to forward promt to gemini and then return the answer
+    -- generate the model
+    --give promt to gemini
+    -- get answer from gemini and if it;s not able to generate the promt then error messege
+    --output the reply'''
+    
     print("Sending to Gemini:", prompt)
     try:
         model = genai.GenerativeModel(model_name="gemini-1.5-flash")
@@ -34,7 +39,11 @@ def speak(text):
     engine.runAndWait()
     
 def ProcessCommand(command):
-    
+    ''' Process the command like main take 
+    -- if the input starts with open then it will process and open that application
+    -- if the input starts with play then it will play whatever the user want to hear
+    -- if there is news in the sentence then we throw output of news with API key 
+    ---else we sent the input to the gemini...'''
     command = command.lower()
     print(f"Processing command: {command}") 
     try:
@@ -48,19 +57,6 @@ def ProcessCommand(command):
             point  = command.lower().split(" ")[1]
             lnk = musiclibrary.music[point]
             webbrowser.open(lnk)
-        
-        elif "news" in command.lower():
-        
-            response = requests.get("https://newsapi.org/v2/top-headlines?country=in&apiKey=e660c7486d194a9894ce541b58962757")
-            # Check if the request was successful
-            if response.status_code == 200:
-                data = response.json()  # Parse the JSON response
-                articles = data.get('articles', [])  # Get the list of articles
-                # Extract and print the headlines
-                for article in articles:
-                    headline = article.get('title')
-                    if headline:
-                        speak(headline)
         else:
             ask_gemini(command)
 
